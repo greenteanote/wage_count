@@ -13,32 +13,29 @@
         font-family: 'Noto Sans KR', sans-serif;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.1.1/",
-    "react": "https://aistudiocdn.com/react@^19.1.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
-    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.1.1/client"
-  }
-}
-</script>
-  <!-- Add Babel Standalone for live TSX transformation -->
+  <!-- Babel Standalone for live JSX transformation -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!-- 
-      All TSX code is now inlined here to avoid MIME type errors on static hosts.
-      The external index.tsx and App.tsx files are no longer used.
-    -->
-    <script type="text/babel" data-type="module">
-// The 'data-type="module"' attribute allows using top-level import statements.
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import ReactDOM from 'react-dom/client';
 
-// --- Helper Functions (from App.tsx) ---
+    <!-- 
+      React and ReactDOM are loaded via traditional script tags from a reliable CDN.
+      This makes them available as global variables (window.React, window.ReactDOM)
+      and avoids all in-browser module loading issues.
+    -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    
+    <!-- 
+      All application code is inlined here as pure JavaScript + JSX.
+      It's a simple Babel script, not a module, so no 'import' statements are needed.
+    -->
+    <script type="text/babel">
+// React and ReactDOM are globally available from the scripts above.
+
+// --- Helper Functions ---
 
 const getWorkdaysInCycle = (startDate, endDate) => {
     let count = 0;
@@ -116,9 +113,12 @@ const calculateEarnings = (salary, payday, now) => {
     };
 };
 
-// --- Main App Component (from App.tsx) ---
+// --- Main App Component ---
 
 const App = () => {
+    // We can use React hooks directly because React is a global variable.
+    const { useState, useEffect, useMemo, useCallback } = React;
+
     // States for saved values used in calculation
     const [salary, setSalary] = useState(() => localStorage.getItem('myPaycheckSalary') || '3000000');
     const [payday, setPayday] = useState(() => parseInt(localStorage.getItem('myPaycheckPayday') || '25', 10));
@@ -282,11 +282,12 @@ const App = () => {
 };
 
 
-// --- App Mounting (from index.tsx) ---
+// --- App Mounting ---
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
+// Use the global ReactDOM object to render the app
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
