@@ -16,7 +16,6 @@ permissions:
   id-token: write
 
 # 한 번에 하나의 동시 배포만 허용하고, 진행 중인 실행과 최신 대기열 사이의 실행은 건너뜁니다.
-# 하지만 진행 중인 실행은 프로덕션 배포가 완료되도록 취소하지 않습니다.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -37,7 +36,8 @@ jobs:
           node-version: 20
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        # 'npm ci'는 캐시 문제와 불일치 오류를 해결하기 위해 사용됩니다.
+        run: npm ci
       - name: Build
         run: npm run build
       - name: Setup Pages
