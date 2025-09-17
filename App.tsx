@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 // --- Helper Functions (defined outside the component) ---
@@ -142,6 +143,7 @@ const App: React.FC = () => {
     }, [numericSalary, payday]);
     
     useEffect(() => {
+        // Calculate values on initial render and when dependencies change.
         updateValues();
     }, [updateValues]);
 
@@ -236,7 +238,7 @@ const App: React.FC = () => {
                 `}</style>
             </div>
             <footer className="text-center mt-8 text-gray-500 text-sm">
-                <p>&copy; {new Date().getFullYear()} My Paycheck Bond. All rights reserved.</p>
+                <p>&copy; {new Date().getFullYear()} 받을 월급. All rights reserved.</p>
             </footer>
         </div>
     );
