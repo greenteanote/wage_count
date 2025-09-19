@@ -186,8 +186,15 @@ const App = () => {
     }, [numericSalary, payday]);
     
     useEffect(() => {
-        // Calculate values on initial render and when dependencies change.
+        // Calculate values on initial render and set up interval for updates.
         updateValues();
+        const intervalId = setInterval(() => {
+            updateValues();
+        }, 1000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [updateValues]);
 
     return (
