@@ -50,6 +50,12 @@ const getWorkdaysInCycle = (startDate, endDate) => {
     return count;
 };
 
+const getValidPaydayDate = (year, monthIndex, payday) => {
+    const lastDayOfMonth = new Date(year, monthIndex + 1, 0).getDate();
+    const clampedPayday = Math.min(Math.max(payday, 1), lastDayOfMonth);
+    return new Date(year, monthIndex, clampedPayday);
+};
+
 const calculateEarnings = (salary, payday, now) => {
     if (salary <= 0 || !payday) {
         return {
@@ -71,12 +77,12 @@ const calculateEarnings = (salary, payday, now) => {
 
     if (todayDate > payday) {
         // We are past this month's payday, waiting for next month's.
-        nextPayday = new Date(year, month + 1, payday);
-        prevPayday = new Date(year, month, payday);
+        nextPayday = getValidPaydayDate(year, month + 1, payday);
+        prevPayday = getValidPaydayDate(year, month, payday);
     } else {
         // We are waiting for this month's payday.
-        nextPayday = new Date(year, month, payday);
-        prevPayday = new Date(year, month - 1, payday);
+        nextPayday = getValidPaydayDate(year, month, payday);
+        prevPayday = getValidPaydayDate(year, month - 1, payday);
     }
 
     // D-Day Calculation
